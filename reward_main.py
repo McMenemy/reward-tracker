@@ -36,6 +36,7 @@ class Rewards:
 daily_rewards = Rewards('daily_rewards.csv')
 weekly_rewards = Rewards('weekly_rewards.csv')
 ninety_days_rewards = Rewards('ninety_days_rewards.csv')
+daily_short_tasks = Rewards('daily_short_tasks.csv')
 
 # interface helper functions
 def menu_options():
@@ -47,6 +48,8 @@ def menu_options():
     print('5 - add a daily reward')
     print('6 - add a weekly reward')
     print('7 - add a 90 day reward')
+    print('8 - get a daily short task')
+    print('9 - add a daily short task')
     print('q - to quit')
 
 def reset_streak():
@@ -78,6 +81,8 @@ def get_model(type):
         return weekly_rewards
     elif type == 'ninety':
         return ninety_days_rewards
+    elif type == 'short':
+        return daily_short_tasks
 
 def menu_get_reward(type):
     model = get_model(type)
@@ -94,7 +99,7 @@ def menu_add_reward(type):
     model = get_model(type)
 
     print('You chose to add a ' + type + ' reward')
-    print('Please type the text of the new daily reward')
+    print('Please type the text of the new ' + type  + ' reward')
     new_reward = input()
     print('How many times should this reward be in your reward bucket?')
     amount_of_times = input()
@@ -126,6 +131,10 @@ while True:
         menu_add_reward('weekly')
     elif value == '7': # add a ninety days reward
         menu_add_reward('ninety')
+    elif value == '8': # get a daily short task
+        menu_get_reward('short')
+    elif value == '9': # add a daily short task
+        menu_add_reward('short')
     elif value == 'q': # quit
         print('Goodbye')
         break
@@ -134,3 +143,35 @@ while True:
     else:
         print('you chose an invalid option. here are your choices: ')
         menu_options
+
+# daily shorts
+# .5 (6) find a new meal to cook or cook a good meal for next days lunch
+# 1 (12) yoga / stretch
+# 1 (12) walk while listening to music
+# .5 (6) tweak exercise doc
+# .5 (6) contact friend/family
+# .25 (3) journal about life goals
+# .5 (3) outline your ideal self
+# .25 (3) think about bigger picture
+# 2 (24) work on html canvas site
+# .25 (3) practice farming league
+# .25 (3) find networking events
+
+# daily longs
+# 4 (48) league of legends
+# 1 (12) watch tv series
+# 1 (12) read a fantasy novel
+# 1 (12) play a single player game
+
+# weekly longs
+# 3 (36) league of legends
+# 1 (12) watch a movie
+# 2 (24) go explore somewhere in city
+# 1 (12) play a new game
+
+# 90 days
+# (1) witch 3 trip
+# divinity trip w/ felicia
+
+# ones to look into
+# shoot basketball
