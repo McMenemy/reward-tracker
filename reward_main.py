@@ -16,7 +16,7 @@ class Rewards:
         return rewards
 
     def get_random_reward(self):
-        index = random.randint(0, len(self.rewards))
+        index = random.randint(0, len(self.rewards) - 1)
         return self.rewards[index][0]
 
     def add_reward(self, reward, times):
@@ -37,7 +37,7 @@ daily_rewards = Rewards('daily_rewards.csv')
 weekly_rewards = Rewards('weekly_rewards.csv')
 ninety_days_rewards = Rewards('ninety_days_rewards.csv')
 
-# interface
+# interface helper functions
 def menu_options():
     print('select an option then press enter')
     print('1 - get a daily reward')
@@ -49,6 +49,63 @@ def menu_options():
     print('7 - add a 90 day reward')
     print('q - to quit')
 
+def reset_streak():
+    with open('streak.csv', 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow([0])
+
+def get_streak():
+    with open('streak.csv', newline='') as f:
+        reader = csv.reader(f)
+        for row in reader:
+            return row[0]
+
+def increase_streak():
+    current_streak = 0
+    with open('streak.csv', newline='') as f:
+        reader = csv.reader(f)
+        for row in reader:
+            current_streak = row[0]
+
+    with open('streak.csv', 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow([int(current_streak) + 1])
+
+def get_model(type):
+    if type == 'daily':
+        return daily_rewards
+    elif type == 'weekly':
+        return weekly_rewards
+    elif type == 'ninety':
+        return ninety_days_rewards
+
+def menu_get_reward(type):
+    model = get_model(type)
+
+    print('Congrats, you chose to get a ' + type + ' reward!')
+    print('Your reward is: ')
+    print('\n' + model.get_random_reward() + '\n')
+    print('Enjoy =)')
+    increase_streak()
+    print('Your current streak is ' + get_streak())
+    print('press "q" quit or "m" for more options')
+
+def menu_add_reward(type):
+    model = get_model(type)
+
+    print('You chose to add a ' + type + ' reward')
+    print('Please type the text of the new daily reward')
+    new_reward = input()
+    print('How many times should this reward be in your reward bucket?')
+    amount_of_times = input()
+    model.add_reward(new_reward, amount_of_times)
+    print(type.title() + ' reward added')
+    print('Back to main menu...')
+    menu_options()
+
+# loop for user interaction (main program)
+
+print('\nYour current streak is ' + get_streak())
 menu_options()
 
 while True:
@@ -61,6 +118,8 @@ while True:
         menu_get_daily_reward('ninety')
     elif value == '4': # reset streak
         print('You chose to reset streak')
+        print('Your streak has been reset')
+        reset_streak()
     elif value == '5': # add a daily reward
         menu_add_reward('daily')
     elif value == '6': # add a weekly reward
@@ -75,39 +134,3 @@ while True:
     else:
         print('you chose an invalid option. here are your choices: ')
         menu_options
-
-def get_model(type):
-    if type == 'daily':
-        return daily_rewards
-    elif type = 'weekly':
-        return weekly_rewards
-    elif type = 'ninety':
-        return ninety_days_rewards
-
-def menu_get_reward(type):
-    model = get_model(type)
-
-    print('Congrats, you chose to get a ' + type + ' reward!')
-    print('Your reward is: ')
-    print('\n' + model.get_random_reward() + '\n')
-    print('Enjoy =)')
-    print('press "q" quit or "m" for more options')
-
-
-def menu_add_reward(type):
-    model = get_model(type)
-
-    print('You chose to add a ' + type ' reward')
-    print('Please type the text of the new daily reward')
-    new_reward = input()
-    print('How many times should this reward be in your reward bucket?')
-    amount_of_times = input()
-    model.add_reward(new_reward, amount_of_times)
-    print(type.title() + ' reward added')
-    print('Back to main menu...')
-    menu_options()
-
-def reset_streak():
-    with open(streak.csv, 'w', newline='') as f:
-        writer = csv.writer(f)
-        writer.writerow(0)
