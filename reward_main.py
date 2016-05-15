@@ -1,5 +1,6 @@
 import random
 import csv
+import time
 
 # Reward list class
 class Rewards:
@@ -37,6 +38,12 @@ daily_rewards = Rewards('daily_rewards.csv')
 weekly_rewards = Rewards('weekly_rewards.csv')
 ninety_days_rewards = Rewards('ninety_days_rewards.csv')
 daily_short_tasks = Rewards('daily_short_tasks.csv')
+
+# store rewards
+def store_reward(reward):
+    with open('reward_history.csv', 'a', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow([reward, time.strftime('%d/%m/%Y')])
 
 # interface helper functions
 def menu_options():
@@ -89,7 +96,9 @@ def menu_get_reward(type):
 
     print('Congrats, you chose to get a ' + type + ' reward!')
     print('Your reward is: ')
-    print('\n' + model.get_random_reward() + '\n')
+    reward = model.get_random_reward()
+    store_reward(reward)
+    print('\n' + reward + '\n')
     print('Enjoy =)')
     increase_streak()
     print('Your current streak is ' + get_streak())
